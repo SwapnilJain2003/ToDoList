@@ -1,14 +1,18 @@
 package com.example.todolist;
 
+import static android.content.ContentValues.TAG;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,16 +24,17 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Objects;
+
 public class RegisterActivity extends AppCompatActivity {
 
     TextView loginText;
-    EditText name,email,password;
+    EditText nameEdt,emailEdt,passwordEdt;
     Button registerBtn;
-    FirebaseAuth mAuth;
-    DatabaseReference databaseReference;
-
+    private FirebaseAuth mAuth;
+    ProgressBar progressBar;
     @Override
-    protected void onStart() {
+    public void onStart() {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
@@ -38,20 +43,21 @@ public class RegisterActivity extends AppCompatActivity {
             finish();
         }
     }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
         mAuth = FirebaseAuth.getInstance();
-        databaseReference = FirebaseDatabase.getInstance().getReference("users");
 
-        name = findViewById(R.id.name);
-        email = findViewById(R.id.email);
-        password = findViewById(R.id.password);
+        nameEdt = findViewById(R.id.name);
+        emailEdt = findViewById(R.id.email);
+        passwordEdt = findViewById(R.id.password);
         registerBtn = findViewById(R.id.registerButton);
         loginText = findViewById(R.id.loginText);
+        progressBar = findViewById(R.id.progressBar);
+
+        mAuth = FirebaseAuth.getInstance();
 
         loginText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,42 +71,39 @@ public class RegisterActivity extends AppCompatActivity {
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(TextUtils.isEmpty(name.getText().toString())){
-                    Toast.makeText(RegisterActivity.this,"Name is Missing!",Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.VISIBLE);
+                String email, password;
+                email = emailEdt.getText().toString();
+                password = passwordEdt.getText().toString();
+
+                if (TextUtils.isEmpty(email)){
+                    Toast.makeText(RegisterActivity.this,"Enter Email",Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.GONE);
                     return;
                 }
-                if(TextUtils.isEmpty(email.getText().toString())){
-                    Toast.makeText(RegisterActivity.this,"Email is Missing!",Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if(TextUtils.isEmpty(password.getText().toString())){
-                    Toast.makeText(RegisterActivity.this,"Password is Missing!",Toast.LENGTH_SHORT).show();
+                if (TextUtils.isEmpty(password)) {
+                    Toast.makeText(RegisterActivity.this,"Enter Password",Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.GONE);
                     return;
                 }
 
-                String userName = name.getText().toString();
-                String userEmail = email.getText().toString();
-
-                // Push the user data to the Firebase Realtime Database
-                String userId = databaseReference.push().getKey();
-                User user = new User(userId, userName, userEmail);
-                assert userId != null;
-                databaseReference.child(userId).setValue(user);
-
-                mAuth.createUserWithEmailAndPassword(userEmail, password.getText().toString())
-                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                         @Override
-                         public void onComplete(@NonNull Task<AuthResult> task) {
-                             if (task.isSuccessful()) {
-                                 // User registered successfully
-                                 FirebaseUser firebaseUser = mAuth.getCurrentUser();
-                                 Toast.makeText(RegisterActivity.this, "Registration Successful!", Toast.LENGTH_SHORT).show();
-                             } else {
-                                 // Registration failed
-                                 Toast.makeText(RegisterActivity.this, "Registration failed!" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                             }
-                         }
-                     });
+                mAuth.createUserWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                progressBar.setVisibility(View.GONE);
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(RegisterActivity.this, "Authentication Successful.",
+                                            Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                } else {
+                                    Toast.makeText(RegisterActivity.this, "Authentication failed.",
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
             }
         });
     }
