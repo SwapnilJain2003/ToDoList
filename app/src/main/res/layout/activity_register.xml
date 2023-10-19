@@ -95,12 +95,13 @@
 
             <Button
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="50dp"
                 android:id="@+id/registerButton"
                 android:text="Register"
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 android:layout_marginTop="30dp"
+                android:background="@drawable/custom_button"
                 android:backgroundTint="#023047"
                 app:cornerRadius = "20dp"/>
 

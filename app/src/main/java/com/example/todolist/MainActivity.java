@@ -1,47 +1,42 @@
 package com.example.todolist;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.TextView;
+import android.widget.Toolbar;
+import android.window.OnBackInvokedDispatcher;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.Calendar;
+
 public class MainActivity extends AppCompatActivity {
-    FirebaseAuth auth;
-    Button logout;
-    TextView user_details;
-    FirebaseUser user;
+    FloatingActionButton addToDoItem;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        auth = FirebaseAuth.getInstance();
-        logout = findViewById(R.id.logout);
-        user_details = findViewById(R.id.user_details);
-        user = auth.getCurrentUser();
-
-        if (user==null){
-            Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
-            startActivity(intent);
-            finish();
-        }else{
-            user_details.setText(user.getEmail());
-        }
-
-        logout.setOnClickListener(new View.OnClickListener() {
+        addToDoItem = findViewById(R.id.addToDoItem);
+        addToDoItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut();
-                Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
+                Intent intent = new Intent(getApplicationContext(),AddToDoItemActivity.class);
                 startActivity(intent);
-                finish();
             }
         });
+
     }
+
 }
