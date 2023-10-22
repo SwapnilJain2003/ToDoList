@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">To Do List</string>
     <string name="add_to_do_item">ADD TO-DO ITEM</string>
+    <string-array name="task_priority">
+        <item>Important</item>
+        <item>Regular</item>
+    </string-array>
 </resources>
