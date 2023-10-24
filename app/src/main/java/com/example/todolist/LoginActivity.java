@@ -1,11 +1,12 @@
 package com.example.todolist;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,6 +18,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
@@ -24,7 +26,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText emailEdt;
     EditText passwordEdt;
     Button loginButton;
-    TextView singUpText;
+    TextView signUpText;
     ProgressBar progressBar;
     private FirebaseAuth mAuth;
 
@@ -32,12 +34,13 @@ public class LoginActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser != null){
-            Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+        if (currentUser != null) {
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
             finish();
         }
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +49,7 @@ public class LoginActivity extends AppCompatActivity {
         emailEdt = findViewById(R.id.email);
         passwordEdt = findViewById(R.id.password);
         loginButton = findViewById(R.id.loginButton);
-        singUpText = findViewById(R.id.signupText);
+        signUpText = findViewById(R.id.signupText);
         progressBar = findViewById(R.id.progressBar);
         mAuth = FirebaseAuth.getInstance();
 
@@ -58,13 +61,13 @@ public class LoginActivity extends AppCompatActivity {
                 email = emailEdt.getText().toString();
                 password = passwordEdt.getText().toString();
 
-                if (TextUtils.isEmpty(email)){
-                    Toast.makeText(getApplicationContext(),"Enter Email",Toast.LENGTH_SHORT).show();
+                if (TextUtils.isEmpty(email)) {
+                    Toast.makeText(getApplicationContext(), "Enter Email", Toast.LENGTH_SHORT).show();
                     progressBar.setVisibility(View.GONE);
                     return;
                 }
                 if (TextUtils.isEmpty(password)) {
-                    Toast.makeText(getApplicationContext(),"Enter Password",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Enter Password", Toast.LENGTH_SHORT).show();
                     progressBar.setVisibility(View.GONE);
                     return;
                 }
@@ -75,14 +78,20 @@ public class LoginActivity extends AppCompatActivity {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 progressBar.setVisibility(View.GONE);
                                 if (task.isSuccessful()) {
-                                    Toast.makeText(getApplicationContext(), "Login Successful.",
-                                            Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                                    Toast.makeText(getApplicationContext(), "Login Successful.", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                     startActivity(intent);
                                     finish();
                                 } else {
-                                    Toast.makeText(getApplicationContext(), "Authentication failed.",
-                                            Toast.LENGTH_SHORT).show();
+                                    // Handle specific error messages
+                                    String errorMessage = task.getException().getMessage();
+                                    Log.d("ERROR",errorMessage);
+                                    System.out.println("Error: "+ errorMessage);
+                                    if (errorMessage.contains("INVALID_LOGIN_CREDENTIALS")){
+                                        Toast.makeText(getApplicationContext(), "Incorrect Email or Password.", Toast.LENGTH_SHORT).show();
+                                    }else {
+                                        Toast.makeText(getApplicationContext(), "Authentication failed.", Toast.LENGTH_SHORT).show();
+                                    }
                                 }
                             }
                         });
@@ -90,10 +99,10 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        singUpText.setOnClickListener(new View.OnClickListener() {
+        signUpText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(),RegisterActivity.class);
+                Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
                 startActivity(intent);
                 finish();
             }
