@@ -4,9 +4,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -20,6 +23,7 @@ import android.widget.Toast;
 import android.window.OnBackInvokedDispatcher;
 
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -156,5 +160,24 @@ public class AddToDoItemActivity extends AppCompatActivity {
 
         // Optionally, you can show a success message
         Toast.makeText(AddToDoItemActivity.this, "Task added successfully.", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_app,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId()==R.id.logout){
+            TaskDbHelper dbHelper = new TaskDbHelper(this);
+            dbHelper.clearDatabase();
+            FirebaseAuth.getInstance().signOut();
+            Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
+            startActivity(intent);
+            finish();
+        }
+        return true;
     }
 }

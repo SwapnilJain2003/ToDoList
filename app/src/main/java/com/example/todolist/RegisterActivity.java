@@ -95,12 +95,21 @@ public class RegisterActivity extends AppCompatActivity {
                                 if (task.isSuccessful()) {
                                     Toast.makeText(RegisterActivity.this, "Authentication Successful.",
                                             Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                     startActivity(intent);
                                     finish();
                                 } else {
-                                    Toast.makeText(RegisterActivity.this, "Authentication failed.",
-                                            Toast.LENGTH_SHORT).show();
+                                    // Check if the error is due to an email already being in use
+                                    if (task.getException() != null) {
+                                        String errorMessage = task.getException().getMessage();
+                                        if (errorMessage != null && errorMessage.contains("email address is already in use")) {
+                                            Toast.makeText(RegisterActivity.this, "Email is already in use.",
+                                                    Toast.LENGTH_SHORT).show();
+                                        }
+                                    } else {
+                                        Toast.makeText(RegisterActivity.this, "Authentication failed.",
+                                                Toast.LENGTH_SHORT).show();
+                                    }
                                 }
                             }
                         });

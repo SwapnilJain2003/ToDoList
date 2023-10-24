@@ -1,17 +1,14 @@
 package com.example.todolist;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.todolist.R;
-import com.example.todolist.Task;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -22,9 +19,10 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
     private List<Task> taskList;
     private OnTaskCheckedChangeListener listener; // Listener for checkbox changes
 
-    public TaskAdapter(Context context, List<Task> taskList) {
+    public TaskAdapter(Context context, List<Task> taskList, OnTaskCheckedChangeListener listener) {
         this.context = context;
         this.taskList = taskList;
+        this.listener = listener; // Initialize the listener
     }
 
     @NonNull
@@ -41,7 +39,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         holder.taskDescription.setText(task.getDescription());
         holder.taskPriority.setText(task.getPriority());
 
-        // Format the Date to a String
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         String formattedDate = dateFormat.format(task.getDueDate());
         holder.taskDueDate.setText(formattedDate);
@@ -50,11 +47,11 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         holder.checkbox.setChecked(task.getMarkCompleted().equals("completed"));
 
         // Handle checkbox state changes
-        holder.checkbox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+        holder.checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 // Update the 'mark_completed' attribute based on checkbox state
-                String markCompleted = isChecked ? "completed" : "not completed";
+                String markCompleted = isChecked ? "completed" : "not_completed";
                 task.setMarkCompleted(markCompleted);
 
                 // Notify the listener that the checkbox state has changed
@@ -64,7 +61,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
             }
         });
     }
-
 
     @Override
     public int getItemCount() {
@@ -90,4 +86,5 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         void onTaskCheckedChanged(Task task);
     }
 }
+
 

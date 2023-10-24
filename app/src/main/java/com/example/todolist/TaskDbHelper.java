@@ -53,12 +53,11 @@ public class TaskDbHelper extends SQLiteOpenHelper {
         values.put(KEY_DESCRIPTION, task.getDescription());
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         String formattedDate = dateFormat.format(task.getDueDate());
-        values.put(KEY_DUE_DATE, formattedDate); // Store the due date as a string
+        values.put(KEY_DUE_DATE, formattedDate);
         values.put(KEY_PRIORITY, task.getPriority());
         db.insert(TABLE_TASKS, null, values);
         db.close();
     }
-
 
     public List<Task> getAllTasks() {
         List<Task> taskList = new ArrayList<>();
@@ -76,7 +75,7 @@ public class TaskDbHelper extends SQLiteOpenHelper {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
                 try {
                     Date dueDate = dateFormat.parse(dueDateString);
-                    task.setDueDate(dueDate); // Convert the due date string to a java.util.Date
+                    task.setDueDate(dueDate);
                 } catch (ParseException e) {
                     // Handle parsing exception
                 }
@@ -91,5 +90,18 @@ public class TaskDbHelper extends SQLiteOpenHelper {
         return taskList;
     }
 
+    public void updateTaskMarkCompleted(int taskId, String markCompleted) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_MARK_COMPLETED, markCompleted);
+        db.update(TABLE_TASKS, values, KEY_ID + " = ?", new String[]{String.valueOf(taskId)});
+        db.close();
+    }
 
+    public void clearDatabase() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_TASKS, null, null);
+        db.close();
+    }
 }
+

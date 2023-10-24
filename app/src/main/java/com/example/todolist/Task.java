@@ -23,7 +23,7 @@ public class Task {
     }
 
     // Getters and Setters for the fields
-    public long getId() {
+    public int getId() {
         return id;
     }
 
