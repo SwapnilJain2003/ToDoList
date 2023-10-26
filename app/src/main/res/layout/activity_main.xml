@@ -8,21 +8,10 @@
     tools:context=".MainActivity"
     android:background="#219EBC">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="To-Do List"
-        android:textStyle="bold"
-        android:textSize="25sp"
-        android:layout_margin="10dp"
-        android:textColor="@color/black"
-        android:id="@+id/textView"/>
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/textView" />
+        android:layout_height="match_parent"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/addToDoItem"

@@ -160,6 +160,10 @@ public class AddToDoItemActivity extends AppCompatActivity {
 
         // Optionally, you can show a success message
         Toast.makeText(AddToDoItemActivity.this, "Task added successfully.", Toast.LENGTH_SHORT).show();
+
+        Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     @Override
@@ -177,6 +181,9 @@ public class AddToDoItemActivity extends AppCompatActivity {
             Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
             startActivity(intent);
             finish();
+        } else if (item.getItemId() == R.id.contact) {
+            Intent intent = new Intent(getApplicationContext(), SendSmsActivity.class);
+            startActivity(intent);
         }
         return true;
     }

@@ -89,6 +89,9 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnTas
             Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
             startActivity(intent);
             finish();
+        } else if (item.getItemId()==R.id.contact) {
+            Intent intent = new Intent(getApplicationContext(), SendSmsActivity.class);
+            startActivity(intent);
         }
         return true;
     }
