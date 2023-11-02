@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -95,5 +96,34 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnTas
         }
         return true;
     }
+
+    void openUpdateTaskActivity(Task task) {
+        Intent intent = new Intent(getApplicationContext(), UpdateTaskActivity.class);
+
+        // Convert the dueDate to milliseconds (assuming dueDate is a Date or Calendar object)
+        long dueDateMillis = task.getDueDate().getTime();
+
+// Pass the dueDateMillis to the intent
+        intent.putExtra("taskDueDate", dueDateMillis);
+
+        // Pass the task details to the update task activity
+        intent.putExtra("taskId", task.getId());
+        intent.putExtra("taskTitle", task.getTitle());
+        intent.putExtra("taskDescription", task.getDescription());
+        intent.putExtra("taskDueDate", task.getDueDate().getTime()); // Convert to milliseconds
+        intent.putExtra("taskPriority", task.getPriority());
+        startActivity(intent);
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    void deleteTask(Task task) {
+        TaskDbHelper dbHelper = new TaskDbHelper(this);
+        dbHelper.deleteTask(task.getId());
+        // Remove the task from the list and notify the adapter
+        taskList.remove(task);
+        taskAdapter.notifyDataSetChanged();
+    }
+
+
 }
 

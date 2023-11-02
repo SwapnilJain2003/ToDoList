@@ -1,14 +1,17 @@
 package com.example.todolist;
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.todolist.R;
+import android.widget.ImageButton;
+
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -45,7 +48,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
 
         // Set the checkbox state based on the 'mark_completed' attribute
         holder.checkbox.setChecked(task.getMarkCompleted().equals("completed"));
-
         // Handle checkbox state changes
         holder.checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -60,6 +62,39 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
                 }
             }
         });
+
+        holder.editTask.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Handle the editTask click event here
+                ((MainActivity) context).openUpdateTaskActivity(task);
+            }
+        });
+
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                PopupMenu popupMenu = new PopupMenu(context, v);
+                popupMenu.getMenuInflater().inflate(R.menu.popup_menu, popupMenu.getMenu());
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        if (item.getItemId() == R.id.updateTask){
+                            Task task = taskList.get(position);
+                            ((MainActivity) context).openUpdateTaskActivity(task);
+                            return true;
+                        } else if (item.getItemId() == R.id.deleteTask) {
+                            Task task = taskList.get(position);
+                            ((MainActivity) context).deleteTask(task);
+                            return true;
+                        }
+                        return false;
+                    }
+                });
+                popupMenu.show();
+                return true;
+            }
+        });
     }
 
     @Override
@@ -70,6 +105,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
     public class TaskViewHolder extends RecyclerView.ViewHolder {
         TextView taskTitle, taskDescription, taskDueDate, taskPriority;
         CheckBox checkbox;
+        ImageButton editTask;
 
         public TaskViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -78,6 +114,8 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
             taskDueDate = itemView.findViewById(R.id.taskDueDate);
             taskPriority = itemView.findViewById(R.id.taskPriority);
             checkbox = itemView.findViewById(R.id.checkbox);
+            editTask = itemView.findViewById(R.id.editTask);
+
         }
     }
 

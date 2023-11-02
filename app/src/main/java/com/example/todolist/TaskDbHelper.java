@@ -103,5 +103,28 @@ public class TaskDbHelper extends SQLiteOpenHelper {
         db.delete(TABLE_TASKS, null, null);
         db.close();
     }
-}
 
+    public void updateTask(int taskId, Task updatedTask) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_TITLE, updatedTask.getTitle());
+        values.put(KEY_DESCRIPTION, updatedTask.getDescription());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        String formattedDate = dateFormat.format(updatedTask.getDueDate());
+        values.put(KEY_DUE_DATE, formattedDate);
+        values.put(KEY_PRIORITY, updatedTask.getPriority());
+        values.put(KEY_MARK_COMPLETED, updatedTask.getMarkCompleted());
+
+        db.update(TABLE_TASKS, values, KEY_ID + " = ?", new String[]{String.valueOf(taskId)});
+        db.close();
+    }
+
+    public void deleteTask(int taskId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_TASKS, KEY_ID + " = ?", new String[]{String.valueOf(taskId)});
+        db.close();
+    }
+
+
+
+}

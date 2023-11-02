@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity"
+    android:background="#219EBC">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Update Task"
+        android:textSize="25sp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:padding="6dp"/>
+
+    <EditText
+        android:id="@+id/taskTitleEdt"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/custom_edittext"
+        android:padding="10dp"
+        android:hint="Task Title"/>
+
+    <EditText
+        android:id="@+id/taskDescriptionEdt"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/custom_edittext"
+        android:padding="10dp"
+        android:hint="Task Description"/>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin="10dp"
+        android:visibility="gone"
+        android:id="@+id/relativeLayout1">
+
+        <TextView
+            android:id="@+id/selectedDate"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Due Date: "
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            android:padding="6dp"
+            android:textColor="@color/black"
+            />
+
+        <ImageView
+            android:layout_alignParentEnd="true"
+            android:id="@+id/crossButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:contentDescription="discard selected date"
+            android:gravity="center"
+            android:src="@drawable/ic_cross"
+            />
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/btnDueDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Pick Due Date"
+        android:textColor="@color/white"
+        android:background="@drawable/custom_button"
+        android:layout_margin="10dp"
+        android:visibility="visible"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:layout_margin="10dp">
+
+        <TextView
+            android:id="@+id/textview"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Task Priority:"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            android:padding="6dp"
+            android:textColor="@color/black"
+            />
+
+        <Spinner
+            android:layout_toEndOf="@id/textview"
+            android:layout_margin="10dp"
+            android:id="@+id/taskPriority"
+            android:layout_width="250dp"
+            android:layout_height="50dp"
+            android:gravity="center"/>
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/updateTaskBtn"
+        android:layout_margin="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/custom_button"
+        android:textColor="@color/white"
+        android:text="Update Task"
+        />
+</LinearLayout>

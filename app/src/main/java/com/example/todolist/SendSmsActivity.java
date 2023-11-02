@@ -24,7 +24,7 @@ public class SendSmsActivity extends AppCompatActivity {
         messageEdt = findViewById(R.id.messageEdt);
         messageButton = findViewById(R.id.messageButton);
 
-        private static final int PERMISSION_REQUEST_SEND_SMS = 1;
+        final int PERMISSION_REQUEST_SEND_SMS = 1;
 
         messageButton.setOnClickListener(new View.OnClickListener() {
             @Override
