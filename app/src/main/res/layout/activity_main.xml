@@ -26,4 +26,12 @@
         android:backgroundTint="#FFB703"
         android:contentDescription="@string/add_to_do_item"
         android:src="@drawable/ic_add" />
+
+    <TextView
+        android:id="@+id/noTasksTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="No tasks available."
+        android:visibility="gone" />
 </RelativeLayout>

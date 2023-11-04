@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -23,6 +25,8 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnTas
     TaskAdapter taskAdapter;
     List<Task> taskList;
 
+    TextView noTasksTextView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnTas
         taskAdapter = new TaskAdapter(this, taskList, this); // Pass the listener
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(taskAdapter);
+        noTasksTextView = findViewById(R.id.noTasksTextView);
 
         addToDoItem = findViewById(R.id.addToDoItem);
         addToDoItem.setOnClickListener(new View.OnClickListener() {
@@ -50,6 +55,15 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnTas
 
         // Fetch tasks from the database and update the taskList
         fetchTasksFromDatabase();
+        if (taskList.isEmpty()) {
+            // No tasks available, show the message
+            recyclerView.setVisibility(View.GONE);
+            noTasksTextView.setVisibility(View.VISIBLE);
+        } else {
+            recyclerView.setVisibility(View.VISIBLE);
+            noTasksTextView.setVisibility(View.GONE);
+        }
+
         taskAdapter.notifyDataSetChanged();
     }
 
@@ -122,6 +136,11 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnTas
         // Remove the task from the list and notify the adapter
         taskList.remove(task);
         taskAdapter.notifyDataSetChanged();
+
+        if (taskList.isEmpty()) {
+            recyclerView.setVisibility(View.GONE);
+            noTasksTextView.setVisibility(View.VISIBLE);
+        }
     }
 
 

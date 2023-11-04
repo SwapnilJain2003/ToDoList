@@ -58,7 +58,7 @@ public class UpdateTaskActivity extends AppCompatActivity {
 
 // Convert dueDateMillis back to a Date or the desired format
             Date dueDate = new Date(dueDateMillis);
-
+            selected_date = new Date(dueDateMillis);
             int taskId = getIntent().getIntExtra("taskId", -1);
             String title = intent.getStringExtra("taskTitle");
             String description = intent.getStringExtra("taskDescription");
@@ -166,6 +166,13 @@ public class UpdateTaskActivity extends AppCompatActivity {
         String priority = taskPriority.getSelectedItem().toString();
         String markCompleted = "not_completed"; // You can change this as needed
 
+        if (selected_date == null) {
+            // Show a toast message if no date is selected
+            Toast.makeText(UpdateTaskActivity.this, "Please select a due date.", Toast.LENGTH_SHORT).show();
+            return; // Exit the method if no date is selected
+        }
+
+
         Task updatedTask = new Task();
         updatedTask.setTitle(title);
         updatedTask.setDescription(description);
@@ -179,6 +186,7 @@ public class UpdateTaskActivity extends AppCompatActivity {
         TaskDbHelper dbHelper = new TaskDbHelper(UpdateTaskActivity.this);
         dbHelper.updateTask(taskId, updatedTask);
 
+        Toast.makeText(this, "Task Updated Successfully!", Toast.LENGTH_SHORT).show();
         // Finish the activity or navigate back to the task list
         finish(); // You can change this as needed
     }
